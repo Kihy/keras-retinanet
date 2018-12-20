@@ -7,7 +7,7 @@ image_dir = "dataset/fire_1720/JPEGImages"
 new_annotation = open("annotation.csv", "w")
 for file in os.listdir(annotation_dir):
     if file.endswith(".xml"):
-        tree = ET.parse(file)
+        tree = ET.parse(os.path.join(annotation_dir,file))
         root = tree.getroot()
         filename = os.path.join(image_dir, root.find("filename").text)
         print(filename)
