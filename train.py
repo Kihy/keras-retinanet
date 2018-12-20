@@ -1,21 +1,14 @@
 import matplotlib
+matplotlib.use("Agg")
 
 from keras_retinanet.preprocessing.csv_generator import CSVGenerator
 
-matplotlib.use("Agg")
+
 # import keras
 import keras
 
 # import keras_retinanet
-import keras_retinanet
-
-
-# import miscellaneous modules
-import matplotlib.pyplot as plt
-import cv2
-import os
-import numpy as np
-import time
+from keras_retinanet import models, losses
 
 # set tf backend to allow memory to grow, instead of claiming everything
 import tensorflow as tf
@@ -32,11 +25,11 @@ def get_session():
 keras.backend.tensorflow_backend.set_session(get_session())
 
 
-model = keras_retinanet.models.backbone('resnet50').retinanet(num_classes=1)
+model = models.backbone('resnet50').retinanet(num_classes=1)
 model.compile(
     loss={
-        'regression'    : keras_retinanet.losses.smooth_l1(),
-        'classification': keras_retinanet.losses.focal()
+        'regression'    : losses.smooth_l1(),
+        'classification': losses.focal()
     },
     optimizer=keras.optimizers.adam(lr=1e-5, clipnorm=0.001)
 )
