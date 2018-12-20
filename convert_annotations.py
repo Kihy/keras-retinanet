@@ -15,8 +15,6 @@ for file in os.listdir(annotation_dir):
         for o in objects:
             c_name = o.find("name").text
             bnd_box = [i for i in o.find("bndbox").itertext() if i.strip() != '']
-            print(c_name)
-            print(bnd_box)
             new_annotation.write("{},{},{},{},{},{}\n".format(filename, *bnd_box, c_name))
 
 new_annotation.close()
