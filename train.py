@@ -34,5 +34,8 @@ model.compile(
     optimizer=keras.optimizers.adam(lr=1e-5, clipnorm=0.001)
 )
 
+weights="weights/resnet50_coco_best_v2.1.0.h5"
+model.load_weights(weights, by_name=True, skip_mismatch=True)
+
 data=CSVGenerator("annotation.csv","class_map.csv")
 model.fit_generator(data, steps_per_epoch = 50, epochs = 20)
