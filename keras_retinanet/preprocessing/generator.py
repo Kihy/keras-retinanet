@@ -221,6 +221,7 @@ class Generator(keras.utils.Sequence):
 
         # resize image
         image, image_scale = self.resize_image(image)
+        print(image.shape)
 
         # apply resizing to annotations too
         annotations['bboxes'] *= image_scale
