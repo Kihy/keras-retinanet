@@ -11,7 +11,9 @@ for set in os.listdir(image_set_dir):
     new_annotation = open("{}_annotation.csv".format(setname), "w")
     set_file=open(os.path.join(image_set_dir,set))
     for line in set_file.readlines():
+
         counter+=1
+        line=line.strip()
         xml_filename=os.path.join(annotation_dir,"{}.xml".format(line))
         tree = ET.parse(xml_filename)
         root = tree.getroot()
