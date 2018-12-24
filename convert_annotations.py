@@ -13,7 +13,7 @@ for set in os.listdir(image_set_dir):
     for line in set_file.readlines():
         counter+=1
         xml_filename=os.path.join(annotation_dir,"{}.xml".format(line))
-        tree = ET.parse(os.path.join(annotation_dir,xml_filename))
+        tree = ET.parse(xml_filename)
         root = tree.getroot()
         filename = os.path.join(image_dir, root.find("filename").text)
         print(filename)
