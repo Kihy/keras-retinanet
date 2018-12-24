@@ -20,8 +20,10 @@ model=models.load_model(model_path, backbone_name='resnet50')
 model=convert_model(model)
 
 labels_to_names={0:'fire'}
-image=plt.imread('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
-
+image=read_image_bgr('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
+# copy to draw on
+draw = image.copy()
+draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
 # preprocess image for network
 image = preprocess_image(image)
 image, scale = resize_image(image, min_side = 512, max_side = 512)
@@ -39,17 +41,13 @@ for box, score, label in zip(boxes[0], scores[0], labels[0]):
     if score < 0.5:
         break
 
-    color = colors[label]
-    print(box)
-    xmin = box[0]
-    ymin = box[1]
-    xmax = box[2]
-    ymax = box[3]
+    color = label_color(label)
+
+    b = box.astype(int)
+    draw_box(draw, b, color = color)
 
     caption = "{} {:.3f}".format(labels_to_names[label], score)
-    current_axis.add_patch(
-        plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, color = color, fill = False, linewidth = 2))
-    current_axis.text(xmin, ymin, label, size = 'x-large', color = 'white', bbox = {'facecolor': color, 'alpha': 1.0})
+    draw_caption(draw, b, caption)
 
 plt.figure(figsize = (20, 12))
 plt.axis('off')
