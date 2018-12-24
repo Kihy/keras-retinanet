@@ -41,10 +41,10 @@ for box, score, label in zip(boxes[0], scores[0], labels[0]):
 
     color = label_color(label)
 
-    xmin = box[2]
-    ymin = box[3]
-    xmax = box[4]
-    ymax = box[5]
+    xmin = box[0]
+    ymin = box[1]
+    xmax = box[2]
+    ymax = box[3]
 
     caption = "{} {:.3f}".format(labels_to_names[label], score)
     current_axis.add_patch(
