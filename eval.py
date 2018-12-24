@@ -18,24 +18,23 @@ model_path = os.path.join('snapshots', 'retinanet_fire_2018-12-24_11:25.h5')
 
 model=models.load_model(model_path, backbone_name='resnet50')
 model=convert_model(model)
-
 labels_to_names={0:'fire'}
+
 image=read_image_bgr('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
 # copy to draw on
 draw = image.copy()
 draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
+
 # preprocess image for network
 image = preprocess_image(image)
 image, scale = resize_image(image, min_side = 512, max_side = 512)
+
 boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
-n_classes=1
+
 # correct for image scale
 boxes /= scale
 # visualize detections
-plt.imshow(draw)
 
-current_axis = plt.gca()
-colors = plt.cm.hsv(np.linspace(0, 1, n_classes + 1)).tolist()
 for box, score, label in zip(boxes[0], scores[0], labels[0]):
     # scores are sorted so we can break
     if score < 0.5:
@@ -50,5 +49,6 @@ for box, score, label in zip(boxes[0], scores[0], labels[0]):
     draw_caption(draw, b, caption)
 
 plt.figure(figsize = (20, 12))
+plt.imshow(draw)
 plt.axis('off')
 plt.savefig("figures/test.jpg")
