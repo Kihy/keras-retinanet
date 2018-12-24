@@ -33,6 +33,7 @@ boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
 # correct for image scale
 boxes /= scale
 # visualize detections
+current_axis = plt.gca()
 for box, score, label in zip(boxes[0], scores[0], labels[0]):
     # scores are sorted so we can break
     if score < 0.5:
@@ -40,11 +41,15 @@ for box, score, label in zip(boxes[0], scores[0], labels[0]):
 
     color = label_color(label)
 
-    b = box.astype(int)
-    draw_box(draw, b, color = color)
+    xmin = box[2]
+    ymin = box[3]
+    xmax = box[4]
+    ymax = box[5]
 
     caption = "{} {:.3f}".format(labels_to_names[label], score)
-    draw_caption(draw, b, caption)
+    current_axis.add_patch(
+        plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, color = color, fill = False, linewidth = 2))
+    current_axis.text(xmin, ymin, label, size = 'x-large', color = 'white', bbox = {'facecolor': color, 'alpha': 1.0})
 
 plt.figure(figsize = (15, 15))
 plt.axis('off')
