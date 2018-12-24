@@ -19,7 +19,7 @@ from keras_retinanet import models, losses
 import tensorflow as tf
 
 def reize( size):
-    return lambda x: ktf.reshape(x, size)
+    return lambda x: tf.image.resize_images(x, size)
 
 def get_session():
     config = tf.ConfigProto()
@@ -45,7 +45,7 @@ model.compile(
 weights="weights/resnet50_coco_best_v2.1.0.h5"
 model.load_weights(weights, by_name=True, skip_mismatch=True)
 
-data = CSVGenerator("annotation.csv","class_map.csv", batch_size = 16, image_min_side = 512, image_max_side = 512, preprocess_image = reize((512,512,3)))
+data = CSVGenerator("annotation.csv","class_map.csv", batch_size = 16, image_min_side = 512, image_max_side = 512, preprocess_image = reize((512,512)))
 
 # TODO: Set the file path under which you want to save the model.
 current_time = datetime.now().strftime('%Y-%m-%d %H:%M').split(" ")
