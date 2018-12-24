@@ -28,7 +28,7 @@ def get_session():
 parser = ConfigParser(interpolation = ExtendedInterpolation())
 parser.read("config.ini")
 params = parser["train"]
-backbone=params["backbone"]
+backbone = params["backbone"]
 
 # use this environment flag to change which GPU to use
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
