@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from math import ceil
 
 import matplotlib
 from keras.callbacks import ModelCheckpoint, CSVLogger, TerminateOnNaN, TensorBoard
@@ -40,8 +41,10 @@ model.compile(
 
 weights="weights/resnet50_coco_best_v2.1.0.h5"
 model.load_weights(weights, by_name=True, skip_mismatch=True)
-
-data = CSVGenerator("annotation.csv","class_map.csv", batch_size = 16, image_min_side = 512, image_max_side = 512)
+batch_size=16
+data = CSVGenerator("train_annotation.csv","class_map.csv", batch_size = batch_size, image_min_side = 512, image_max_side = 512)
+val_data = CSVGenerator("val_annotation.csv","class_map.csv", batch_size = batch_size, image_min_side = 512, image_max_side = 512)
+val_dataset_size=val_data.size()
 
 # TODO: Set the file path under which you want to save the model.
 current_time = datetime.now().strftime('%Y-%m-%d %H:%M').split(" ")
@@ -85,8 +88,8 @@ history = model.fit_generator(generator = data,
                               steps_per_epoch = steps_per_epoch,
                               epochs = final_epoch,
                               callbacks = callbacks,
-                              # validation_data = val_generator,
-                              # validation_steps = ceil(val_dataset_size / batch_size),
+                              validation_data = val_data,
+                              validation_steps = ceil(val_dataset_size / batch_size),
                               initial_epoch = initial_epoch)
 
 
