@@ -32,7 +32,7 @@ n_classes=1
 # correct for image scale
 boxes /= scale
 # visualize detections
-plt.imshow(image)
+plt.imshow(draw)
 
 current_axis = plt.gca()
 colors = plt.cm.hsv(np.linspace(0, 1, n_classes + 1)).tolist()
