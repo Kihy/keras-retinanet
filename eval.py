@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 import matplotlib
+from scipy.misc import imread
 
 from keras_retinanet.models import convert_model
 
@@ -20,10 +21,7 @@ model=models.load_model(model_path, backbone_name='resnet50')
 model=convert_model(model)
 
 labels_to_names={0:'fire'}
-image=read_image_bgr('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
-
-draw = image.copy()
-draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
+image=imread('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
 
 # preprocess image for network
 image = preprocess_image(image)
@@ -33,6 +31,8 @@ n_classes=1
 # correct for image scale
 boxes /= scale
 # visualize detections
+plt.imshow(image)
+
 current_axis = plt.gca()
 colors = plt.cm.hsv(np.linspace(0, 1, n_classes + 1)).tolist()
 for box, score, label in zip(boxes[0], scores[0], labels[0]):
@@ -52,7 +52,6 @@ for box, score, label in zip(boxes[0], scores[0], labels[0]):
         plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, color = color, fill = False, linewidth = 2))
     current_axis.text(xmin, ymin, label, size = 'x-large', color = 'white', bbox = {'facecolor': color, 'alpha': 1.0})
 
-plt.figure(figsize = (15, 15))
+plt.figure(figsize = (20, 12))
 plt.axis('off')
-plt.imshow(draw)
 plt.savefig("figures/test.jpg")
