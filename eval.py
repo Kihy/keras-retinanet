@@ -29,17 +29,18 @@ draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
 image = preprocess_image(image)
 image, scale = resize_image(image, min_side = 512, max_side = 512)
 boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
-
+n_classes=1
 # correct for image scale
 boxes /= scale
 # visualize detections
 current_axis = plt.gca()
+colors = plt.cm.hsv(np.linspace(0, 1, n_classes + 1)).tolist()
 for box, score, label in zip(boxes[0], scores[0], labels[0]):
     # scores are sorted so we can break
     if score < 0.5:
         break
 
-    color = label_color(label)
+    color = colors[label]
 
     xmin = box[0]
     ymin = box[1]
