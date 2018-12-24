@@ -218,7 +218,7 @@ class Generator(keras.utils.Sequence):
         """
         # preprocess the image
         image = self.preprocess_image(image)
-
+        print(image.shape)
         # resize image
         image, image_scale = self.resize_image(image)
         print(image.shape)
