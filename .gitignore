@@ -8,3 +8,5 @@ dataset
 .eggs
 .idea
 build
+weights
+tensorboard
