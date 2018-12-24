@@ -2,7 +2,6 @@ import os
 import cv2
 import numpy as np
 import matplotlib
-from scipy.misc import imread
 
 from keras_retinanet.models import convert_model
 
@@ -21,7 +20,7 @@ model=models.load_model(model_path, backbone_name='resnet50')
 model=convert_model(model)
 
 labels_to_names={0:'fire'}
-image=imread('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
+image=plt.imread('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
 
 # preprocess image for network
 image = preprocess_image(image)
