@@ -2,6 +2,9 @@ import os
 import cv2
 import numpy as np
 import matplotlib
+
+from keras_retinanet.models import convert_model
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
@@ -14,6 +17,8 @@ from keras_retinanet.utils.visualization import draw_box, draw_caption
 model_path = os.path.join('snapshots', 'retinanet_fire_2018-12-24_11:25.h5')
 
 model=models.load_model(model_path, backbone_name='resnet50')
+model=convert_model(model)
+
 labels_to_names={0:'fire'}
 image=read_image_bgr('dataset/fire_1720/JPEGImages/rBOilFnymmWAKYFOAAQVF4R-xB8651.jpg')
 
