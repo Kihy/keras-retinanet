@@ -41,7 +41,7 @@ for box, score, label in zip(boxes[0], scores[0], labels[0]):
         break
 
     color = colors[label]
-
+    print(box)
     xmin = box[0]
     ymin = box[1]
     xmax = box[2]
