@@ -66,7 +66,7 @@ model_checkpoint = ModelCheckpoint(
     save_best_only = True,
     save_weights_only = False,
     mode = 'auto',
-    period = 10)
+    period = int(params["save_period"]))
 # model_checkpoint.best =
 
 csv_logger = CSVLogger(
