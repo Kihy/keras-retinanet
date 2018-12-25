@@ -82,11 +82,27 @@ tensorboard = TensorBoard(
     log_dir = os.path.join(params["tensorboard_path"], 'retinanet', current_time[0], current_time[1]),
     write_images = True, write_graph = True)
 
+
+class AccHistory(keras.callbacks.Callback):
+    def on_train_begin(self, logs = None):
+        self.acc = []
+        self.val_acc = []
+
+    def on_epoch_end(self, epoch, logs = None):
+        self.acc.append(logs.get('acc'))
+        self.val_acc.append(logs.get('val_acc'))
+        print(logs)
+
+
+history = AccHistory()
+
 callbacks = [model_checkpoint,
              csv_logger,
              #            learning_rate_scheduler,
              terminate_on_nan,
-             tensorboard]
+             tensorboard,
+             history
+             ]
 # Fit model
 
 # If you're resuming a previous training, set `initial_epoch` and `final_epoch` accordingly.
@@ -94,11 +110,13 @@ initial_epoch = 0
 final_epoch = int(params["epochs"])
 steps_per_epoch = int(params["steps_per_epoch"])
 
-history = model.fit_generator(generator = data,
-                              steps_per_epoch = steps_per_epoch,
-                              epochs = final_epoch,
-                              callbacks = callbacks,
-                              validation_data = val_data,
-                              validation_steps = ceil(val_dataset_size / batch_size),
-                              initial_epoch = initial_epoch,
-                              )
+model.fit_generator(generator = data,
+                    steps_per_epoch = steps_per_epoch,
+                    epochs = final_epoch,
+                    callbacks = callbacks,
+                    validation_data = val_data,
+                    validation_steps = ceil(val_dataset_size / batch_size),
+                    initial_epoch = initial_epoch,
+                    )
+print(history.val_acc)
+print(history.acc)
