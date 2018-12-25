@@ -50,6 +50,7 @@ for line in f.readlines()[:num_file]:
 
     for box, score, label in zip(boxes[0], scores[0], labels[0]):
         # scores are sorted so we can break
+        print(box, score)
         if score < 0.5:
             break
 
@@ -61,7 +62,7 @@ for line in f.readlines()[:num_file]:
         caption = "{} {:.3f}".format(labels_to_names[label], score)
         draw_caption(draw, b, caption)
 
-        print(b)
+
 
     plt.figure(figsize = (20, 12))
     plt.imshow(draw)
