@@ -42,7 +42,8 @@ model.compile(
         'regression': losses.smooth_l1(),
         'classification': losses.focal()
     },
-    optimizer = keras.optimizers.adam(lr = 1e-5, clipnorm = 0.001)
+    optimizer = keras.optimizers.adam(lr = 1e-5, clipnorm = 0.001),
+    metrics = ['accuracy','val_accuracy']
 )
 
 weights = params["weights_path"]
@@ -82,26 +83,11 @@ tensorboard = TensorBoard(
     log_dir = os.path.join(params["tensorboard_path"], 'retinanet', current_time[0], current_time[1]),
     write_images = True, write_graph = True)
 
-
-class AccHistory(keras.callbacks.Callback):
-    def on_train_begin(self, logs = None):
-        self.acc = []
-        self.val_acc = []
-
-    def on_epoch_end(self, epoch, logs = None):
-        self.acc.append(logs.get('acc'))
-        self.val_acc.append(logs.get('val_acc'))
-        print(logs)
-
-
-history = AccHistory()
-
 callbacks = [model_checkpoint,
              csv_logger,
              #            learning_rate_scheduler,
              terminate_on_nan,
              tensorboard,
-             history
              ]
 # Fit model
 
