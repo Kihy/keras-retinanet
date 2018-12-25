@@ -43,7 +43,7 @@ model.compile(
         'classification': losses.focal()
     },
     optimizer = keras.optimizers.adam(lr = 1e-5, clipnorm = 0.001),
-    metrics = ['accuracy','val_accuracy']
+    metrics = ['accuracy']
 )
 
 weights = params["weights_path"]
