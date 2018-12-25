@@ -100,4 +100,5 @@ history = model.fit_generator(generator = data,
                               callbacks = callbacks,
                               validation_data = val_data,
                               validation_steps = ceil(val_dataset_size / batch_size),
-                              initial_epoch = initial_epoch)
+                              initial_epoch = initial_epoch,
+                              )

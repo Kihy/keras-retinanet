@@ -61,6 +61,8 @@ for line in f.readlines()[:num_file]:
         caption = "{} {:.3f}".format(labels_to_names[label], score)
         draw_caption(draw, b, caption)
 
+        print(b)
+
     plt.figure(figsize = (20, 12))
     plt.imshow(draw)
     plt.axis('off')
