@@ -5,6 +5,12 @@ import random
 
 # Path to dataset folder
 data_folder="dataset/fire_1720"
+# Split Percentage
+train_prob = 0.8
+val_prob = 0.1
+test_prob = 0.1
+# Seeding
+random.seed(1)
 
 folder_names=["JPEGImages", "ImageSets", "Annotations","ImageSets/Main"]
 # make folders
@@ -27,12 +33,7 @@ for filename in listdir(data_folder):
 IMAGE_PATH = join(data_folder, "JPEGImages")
 # Path for the output of the image sets
 IMAGESET_PATH = join(data_folder, "ImageSets/Main")
-# Split Percentage
-train_prob = 0.8
-val_prob = 0.1
-test_prob = 0.1
-# Seeding
-random.seed(1)
+
 
 filenames = [splitext(f)[0] for f in listdir(IMAGE_PATH)]
 
