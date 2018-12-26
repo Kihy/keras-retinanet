@@ -37,6 +37,7 @@ for line in f.readlines()[:num_file]:
     # # copy to draw on
     # draw = image.copy()
     # draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
+    plt.imshow(image)
 
     # preprocess image for network
     # image = preprocess_image(image)
@@ -62,7 +63,6 @@ for line in f.readlines()[:num_file]:
         caption = "{} {:.3f}".format(labels_to_names[label], score)
         draw_caption(image, b, caption)
 
-    plt.imshow(image)
     # plt.axis('off')
     plt.savefig("figures/{}.jpg".format(filename))
 f.close()
