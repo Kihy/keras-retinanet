@@ -46,9 +46,9 @@ for line in f.readlines()[:num_file]:
     boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis = 0))
 
     # correct for image scale
-    boxes *= scale
+    boxes /= scale
     # visualize detections
-
+    ax = plt.gca()
     for box, score, label in zip(boxes[0], scores[0], labels[0]):
         # scores are sorted so we can break
         print(box, score)
@@ -58,7 +58,14 @@ for line in f.readlines()[:num_file]:
         color = label_color(label)
 
         b = box.astype(int)
-        draw_box(image, b, color = color)
+        print(b)
+
+        # Create a Rectangle patch
+        rect = matplotlib.patches.Rectangle((b[0], b[1]), (b[2]-b[0]), (b[3]-b[1]), linewidth = 1, edgecolor = 'r', facecolor = 'none', color=color)
+
+        # Add the patch to the Axes
+        ax.add_patch(rect)
+        # draw_box(image, b, color = color)
 
         caption = "{} {:.3f}".format(labels_to_names[label], score)
         draw_caption(image, b, caption)
