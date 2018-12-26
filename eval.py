@@ -59,9 +59,8 @@ for line in f.readlines()[:num_file]:
 
         b = box.astype(int)
         print(b)
-
         # Create a Rectangle patch
-        rect = matplotlib.patches.Rectangle((b[0], b[1]), (b[2]-b[0]), (b[3]-b[1]), linewidth = 1, edgecolor = 'r', facecolor = 'none', color=color)
+        rect = matplotlib.patches.Rectangle((b[0], b[1]), (b[2]-b[0]), (b[3]-b[1]), linewidth = 1, edgecolor = 'r', facecolor = 'none')
 
         # Add the patch to the Axes
         ax.add_patch(rect)
