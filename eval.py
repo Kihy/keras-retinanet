@@ -64,7 +64,7 @@ for line in f.readlines()[:num_file]:
 
 
 
-    plt.figure(figsize = (20, 12))
+    plt.figure()
     plt.imshow(draw)
     plt.axis('off')
     plt.savefig("figures/{}.jpg".format(filename))
