@@ -39,7 +39,7 @@ for line in f.readlines()[:num_file]:
     draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
 
     # preprocess image for network
-    image = preprocess_image(image)
+    # image = preprocess_image(image)
     image, scale = resize_image(image, min_side = 512, max_side = 512)
 
     boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis = 0))
