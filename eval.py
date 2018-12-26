@@ -22,7 +22,7 @@ params = parser["eval"]
 
 image_dir = params["image_dir"]
 model_path = params["model_path"]
-
+print(params["backbone"])
 model = models.load_model(model_path, backbone_name = params["backbone"])
 model = convert_model(model)
 labels_to_names = {0: 'fire'}
