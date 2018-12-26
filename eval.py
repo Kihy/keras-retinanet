@@ -57,12 +57,12 @@ for line in f.readlines()[:num_file]:
         color = label_color(label)
 
         b = box.astype(int)
-        draw_box(draw, b, color = color)
+        draw_box(image, b, color = color)
 
         caption = "{} {:.3f}".format(labels_to_names[label], score)
-        draw_caption(draw, b, caption)
+        draw_caption(image, b, caption)
 
-    plt.imshow(draw)
+    plt.imshow(image)
     # plt.axis('off')
     plt.savefig("figures/{}.jpg".format(filename))
 f.close()
