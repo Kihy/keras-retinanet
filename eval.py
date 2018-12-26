@@ -32,11 +32,11 @@ f = open(test_file_path, "r")
 
 for line in f.readlines()[:num_file]:
     filename = line.strip()
-    image = read_image_bgr(os.path.join(image_dir, filename + ".jpg"))
+    image = matplotlib.image.imread(os.path.join(image_dir, filename + ".jpg"))
 
-    # copy to draw on
-    draw = image.copy()
-    draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
+    # # copy to draw on
+    # draw = image.copy()
+    # draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
 
     # preprocess image for network
     # image = preprocess_image(image)
@@ -63,6 +63,6 @@ for line in f.readlines()[:num_file]:
         draw_caption(draw, b, caption)
 
     plt.imshow(draw)
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig("figures/{}.jpg".format(filename))
 f.close()
