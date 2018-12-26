@@ -46,7 +46,7 @@ for line in f.readlines()[:num_file]:
     boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis = 0))
 
     # correct for image scale
-    boxes /= scale
+    boxes *= scale
     # visualize detections
 
     for box, score, label in zip(boxes[0], scores[0], labels[0]):
