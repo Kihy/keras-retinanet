@@ -5,16 +5,18 @@ annotation_dir = "dataset/fire_1720/Annotations"
 image_dir = "dataset/fire_1720/JPEGImages"
 image_set_dir = "dataset/fire_1720/ImageSets/Main"
 
+# create gound truth files for detection as well as converting annotations
+
 for set in os.listdir(image_set_dir):
     counter = 0
     setname = set.split(".")[0]
     new_annotation = open("{}_annotation.csv".format(setname), "w")
     set_file = open(os.path.join(image_set_dir, set))
     for line in set_file.readlines():
-
         counter += 1
         line = line.strip()
         xml_filename = os.path.join(annotation_dir, "{}.xml".format(line))
+        gt_file=open("groundtruths/{}.txt".format(line),"w")
         tree = ET.parse(xml_filename)
         root = tree.getroot()
         filename = os.path.join(image_dir, root.find("filename").text)
@@ -23,5 +25,7 @@ for set in os.listdir(image_set_dir):
             c_name = o.find("name").text
             bnd_box = [i for i in o.find("bndbox").itertext() if i.strip() != '']
             new_annotation.write("{},{},{},{},{},{}\n".format(filename, *bnd_box, c_name))
+            gt_file.write("{} {} {} {} {}\n".format(c_name, *bnd_box))
+        gt_file.close()
     new_annotation.close()
     print("setname: {}, processed: {}".format(setname, counter))
