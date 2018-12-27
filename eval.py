@@ -85,3 +85,6 @@ def main():
         plt.savefig("figures/{}.jpg".format(filename))
         plt.clf()
         detection_file.close()
+
+if __name__ == "__main__":
+    main()
