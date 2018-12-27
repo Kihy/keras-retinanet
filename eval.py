@@ -17,20 +17,6 @@ from keras_retinanet.utils.colors import label_color
 from keras_retinanet.utils.image import read_image_bgr, preprocess_image, resize_image
 from keras_retinanet.utils.visualization import draw_box, draw_caption
 
-def create_ground_truths(path, image_names):
-    annotations = open(path, "r")
-    anno_dict = {}
-    for i in annotations.readlines():
-        if i.rstrip() not in image_names:
-            break
-        name, b1, b2, b3, b4, cls = i.rstrip().split()
-        if name not in anno_dict.keys():
-            anno_dict[name] = []
-        anno_dict[name].append([b1, b2, b3, b4])
-    return anno_dict
-
-
-
 def main():
 
     parser = ConfigParser(interpolation = ExtendedInterpolation())
@@ -49,12 +35,12 @@ def main():
     f = open(test_file_path, "r")
     image_names = f.readlines()[:num_file]
     f.close()
-    annotations_dict = load_annotations(params["annotation_path"], image_names)
 
     for line in image_names:
         filename = line.strip()
+        detection_file=open("detections/{}.txt".format(filename),"w")
+
         image = matplotlib.image.imread(os.path.join(image_dir, filename + ".jpg"))
-        gt_box = annotations_dict[filename]
         # # copy to draw on
         # draw = image.copy()
         # draw = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
@@ -75,7 +61,7 @@ def main():
         ax = plt.gca()
         for box, score, label in zip(boxes[0], scores[0], labels[0]):
             # scores are sorted so we can break
-
+            detection_file.write("{} {} {} {} {} {}\n".format(label,score,*box))
             if score < 0.5:
                 print("ignored: ", box, score)
                 break
@@ -98,4 +84,4 @@ def main():
         # plt.axis('off')
         plt.savefig("figures/{}.jpg".format(filename))
         plt.clf()
-
+        detection_file.close()
