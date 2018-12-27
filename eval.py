@@ -61,7 +61,7 @@ def main():
         ax = plt.gca()
         for box, score, label in zip(boxes[0], scores[0], labels[0]):
             # scores are sorted so we can break
-            detection_file.write("{} {} {} {} {} {}\n".format(label,score,*box))
+            detection_file.write("{} {:.5f} {:.0f} {:.0f} {:.0f} {:.0f}\n".format(labels_to_names[label],score,*box))
             if score < 0.5:
                 print("ignored: ", box, score)
                 break
