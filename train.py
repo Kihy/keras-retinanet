@@ -42,7 +42,7 @@ def main():
     # set the modified tf session as backend in keras
     keras.backend.tensorflow_backend.set_session(get_session())
 
-    model = models.backbone(backbone).retinanet(num_classes=1)
+    model = models.backbone(backbone).retinanet(num_classes=2)
     model.compile(
         loss={
             'regression': losses.smooth_l1(),
@@ -58,9 +58,10 @@ def main():
 
     preprocesss=get_preprocessing(bool(params["preprocess"]))
 
-    data = CSVGenerator("train_annotation.csv", "class_map.csv", batch_size=batch_size, image_min_side=512,
+    path="retinanet_annotations/{}".format(params["dataset"])
+    data = CSVGenerator(os.path.join(path,"train_annotation.csv"), os.path.join(path,"class_map.csv"), batch_size=batch_size, image_min_side=512,
                         image_max_side=512, preprocess_image=preprocesss)
-    val_data = CSVGenerator("val_annotation.csv", "class_map.csv", batch_size=batch_size, image_min_side=512,
+    val_data = CSVGenerator(os.path.join(path,"val_annotation.csv"), os.path.join(path,"class_map.csv"), batch_size=batch_size, image_min_side=512,
                             image_max_side=512, preprocess_image=preprocesss)
 
     val_dataset_size = val_data.size()
@@ -69,7 +70,7 @@ def main():
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M').split(" ")
     model_checkpoint = ModelCheckpoint(
         filepath=os.path.join(params["check_point_path"],
-                              'retinanet_fire_{}_{}_{}_{}.csv'.format(backbone, params["preprocess"],current_time[0], current_time[1])),
+                              'retinanet_{}_{}_{}_{}_{}.h5'.format(params["dataset"],backbone, params["preprocess"],current_time[0], current_time[1])),
         monitor='val_loss',
         verbose=1,
         save_best_only=True,
@@ -80,7 +81,7 @@ def main():
 
     csv_logger = CSVLogger(
         filename=os.path.join(params["csv_path"],
-                              'retinanet_fire_{}_{}_{}_{}.csv'.format(backbone, params["preprocess"],current_time[0], current_time[1])),
+                              'retinanet_{}_{}_{}_{}_{}.csv'.format(params["dataset"],backbone, params["preprocess"],current_time[0], current_time[1])),
         separator=',',
         append=True)
 

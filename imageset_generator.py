@@ -4,11 +4,11 @@ import random
 
 
 # Path to dataset folder
-data_folder="dataset/fire_1720"
+data_folder="dataset/hatman"
 # Split Percentage
 train_prob = 0.8
-val_prob = 0.1
-test_prob = 0.1
+val_prob = 0.2
+test_prob = 0
 # Seeding
 random.seed(1)
 
