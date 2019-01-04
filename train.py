@@ -45,27 +45,33 @@ def main():
     # set the modified tf session as backend in keras
     keras.backend.tensorflow_backend.set_session(get_session())
 
-    model = models.backbone(backbone).retinanet(num_classes = 2)
-    model.compile(
-        loss = {
-            'regression': losses.smooth_l1(),
-            'classification': losses.focal()
-        },
-        optimizer = keras.optimizers.adam(lr = 1e-5, clipnorm = 0.001),
-        metrics = ['accuracy']
-    )
+    resume=bool(params["resume"])
+    # if resuming load saved model instead
+    if resume:
+        model = models.load_model(params["model_path"], backbone_name = backbone)
+    else:
+        model = models.backbone(backbone).retinanet(num_classes = int(params["num_classes"]))
+        model.compile(
+            loss = {
+                'regression': losses.smooth_l1(),
+                'classification': losses.focal()
+            },
+            optimizer = keras.optimizers.adam(lr = 1e-5, clipnorm = 0.001),
+            metrics = ['accuracy']
+        )
 
-    weights = params["weights_path"]
-    model.load_weights(weights, by_name = True, skip_mismatch = True)
+        weights = params["weights_path"]
+        model.load_weights(weights, by_name = True, skip_mismatch = True)
+
     batch_size = int(params["batchsize"])
 
     preprocesss = get_preprocessing(bool(params["preprocess"]))
 
-    path = "retinanet_annotations/{}".format(params["dataset"])
-    data = CSVGenerator(os.path.join(path, "train_annotation.csv"), os.path.join(path, "class_map.csv"),
+    anno_path = "retinanet_annotations/{}".format(params["dataset"])
+    data = CSVGenerator(os.path.join(anno_path, "train_annotation.csv"), os.path.join(anno_path, "class_map.csv"),
                         batch_size = batch_size, image_min_side = 512,
                         image_max_side = 512, preprocess_image = preprocesss)
-    val_data = CSVGenerator(os.path.join(path, "val_annotation.csv"), os.path.join(path, "class_map.csv"),
+    val_data = CSVGenerator(os.path.join(anno_path, "val_annotation.csv"), os.path.join(anno_path, "class_map.csv"),
                             batch_size = batch_size, image_min_side = 512,
                             image_max_side = 512, preprocess_image = preprocesss)
 
@@ -109,8 +115,12 @@ def main():
     # Fit model
 
     # If you're resuming a previous training, set `initial_epoch` and `final_epoch` accordingly.
-    initial_epoch = 0
-    final_epoch = int(params["epochs"])
+    if resume:
+        initial_epoch=int(params["initial_epoch"])
+        final_epoch=int(params["final_epoch"])
+    else:
+        initial_epoch = 0
+        final_epoch = int(params["epochs"])
     steps_per_epoch = int(params["steps_per_epoch"])
 
     model.fit_generator(generator = data,
