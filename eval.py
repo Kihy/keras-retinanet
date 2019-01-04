@@ -17,18 +17,19 @@ from keras_retinanet.utils.colors import label_color
 from keras_retinanet.utils.image import read_image_bgr, preprocess_image, resize_image
 from keras_retinanet.utils.visualization import draw_box, draw_caption
 
+
 def load_labels(path):
-    f=open(path, "r")
-    labels={}
-    count=0
+    f = open(path, "r")
+    labels = {}
+    count = 0
     for i in f.readlines():
         label, index = i.rstrip().split(",")
-        labels[int(index)]=label
-        count+=1
+        labels[int(index)] = label
+        count += 1
     return labels, count
 
-def main():
 
+def main():
     parser = ConfigParser(interpolation = ExtendedInterpolation())
     parser.read("config.ini")
     params = parser["eval"]
@@ -38,7 +39,7 @@ def main():
     print(params["backbone"])
     model = models.load_model(model_path, backbone_name = params["backbone"])
     model = convert_model(model)
-    labels_to_names,n_classes = load_labels("retinanet_annotations/{}/class_map.csv".format(params["dataset"]))
+    labels_to_names, n_classes = load_labels("retinanet_annotations/{}/class_map.csv".format(params["dataset"]))
     num_file = int(params["num_file"])
     test_file_path = params["image_set_path"]
     f = open(test_file_path, "r")
@@ -47,7 +48,7 @@ def main():
 
     for line in image_names:
         filename = line.strip()
-        detection_file=open("detections/{}.txt".format(filename),"w")
+        detection_file = open("detections/{}.txt".format(filename), "w")
 
         image = matplotlib.image.imread(os.path.join(image_dir, filename + ".jpg"))
         # # copy to draw on
@@ -70,7 +71,7 @@ def main():
         ax = plt.gca()
         for box, score, label in zip(boxes[0], scores[0], labels[0]):
             # scores are sorted so we can break
-            detection_file.write("{} {:.5f} {:.0f} {:.0f} {:.0f} {:.0f}\n".format(labels_to_names[label],score,*box))
+            detection_file.write("{} {:.5f} {:.0f} {:.0f} {:.0f} {:.0f}\n".format(labels_to_names[label], score, *box))
             if score < 0.5:
                 print("ignored: ", box, score)
                 break
@@ -94,6 +95,7 @@ def main():
         plt.savefig("figures/{}.jpg".format(filename))
         plt.clf()
         detection_file.close()
+
 
 if __name__ == "__main__":
     main()
